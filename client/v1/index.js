@@ -72,7 +72,7 @@ console.log(brand_names.length);
 
 const liste_price = marketplace.sort((product1,product2) => product1.price - product2.price);
 const products_sorted_price = liste_price.map(x=>x.name);
-console.log(products_sorted_price)
+console.log(products_sorted_price);
 
 // 🎯 TODO 5: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
@@ -85,7 +85,7 @@ const date_ordered = marketplace.sort((productA,productB) => {
   dateB.released - dateA.released;});
   
 const products_sorted_date = date_ordered.map(x=>x.name);
-console.log(products_sorted_date)
+console.log(products_sorted_date);
 
 // 🎯 TODO 6: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
@@ -93,7 +93,7 @@ console.log(products_sorted_date)
 
 const price_filtered = marketplace.filter(products => products.price>=50 && products.price<=100);
 const products_filtered_price=price_filtered.map(x=>x.name);
-console.log(price_filtered)
+console.log(price_filtered);
 
 // 🎯 TODO 7: Average price
 // 1. Determine the average price of the marketplace
@@ -411,7 +411,7 @@ function checkPrice(price){
   return price<100;
 }
 
-console.log(reasonable)
+console.log(reasonable);
 
 // 🎯 TODO 3: Find a specific product
 // 1. Find the product with the uuid `2b9a47e3-ed73-52f6-8b91-379e9c8e526c`
