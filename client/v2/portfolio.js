@@ -17,6 +17,7 @@ GET https://clear-fashion-api.vercel.app/brands
 Search for available brands list
 */
 
+
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
@@ -26,6 +27,11 @@ const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+
+// New selectors created
+const selectBrand = document.querySelector('#brand-select'); // Brand selector
+const selectSortPrice = document.querySelector('#sort-select'); // Sorted Price selector
+
 
 /**
  * Set global value
@@ -42,21 +48,22 @@ const setCurrentProducts = ({result, meta}) => {
  * @param  {Number}  [page=1] - current page to fetch
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
+ * @param {String} // brand name used to filter 
  */
+
 const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
-    );
+      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`);
     const body = await response.json();
 
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
-    }
-
-    return body.data;
-  } catch (error) {
+    }     
+  return body.data;
+  } 
+  catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
   }
@@ -66,6 +73,7 @@ const fetchProducts = async (page = 1, size = 12) => {
  * Render list of products
  * @param  {Array} products
  */
+
 const renderProducts = products => {
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
@@ -74,10 +82,10 @@ const renderProducts = products => {
       return `
       <div class="product" id=${product.uuid}>
         <span>${product.brand}</span>
-        <a href="${product.link}">${product.name}</a>
+        <a href="${product.link}" target="_blank">${product.name}</a>           
         <span>${product.price}</span>
       </div>
-    `;
+    `; // we add the attribute target ="_blank" so that when a user clicks on a product link, it is opened in a new page (Feature 12)
     })
     .join('');
 
@@ -87,10 +95,12 @@ const renderProducts = products => {
   sectionProducts.appendChild(fragment);
 };
 
+
 /**
  * Render page selector
  * @param  {Object} pagination
  */
+
 const renderPagination = pagination => {
   const {currentPage, pageCount} = pagination;
   const options = Array.from(
@@ -110,6 +120,7 @@ const renderIndicators = pagination => {
   const {count} = pagination;
 
   spanNbProducts.innerHTML = count;
+  console.log(spanNbProducts);
 };
 
 const render = (products, pagination) => {
@@ -125,16 +136,47 @@ const render = (products, pagination) => {
 /**
  * Select the number of products to display
  */
+
 selectShow.addEventListener('change', async (event) => {
   const products = await fetchProducts(currentPagination.currentPage, parseInt(event.target.value));
-
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
 
+/*
+  Feature 1 - Browse pages
+  Select the number of the page
+*/
+selectPage.addEventListener('change', async (event) => {
+  const products = await fetchProducts(parseInt(event.target.value), selectShow.value);
+  // the first parameter corresponds to the currentPage and the second indicates the number of products to display
+  // which is indicated by  the selectShow.value 
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
+
+selectBrand.addEventListener('change', async (event) => {
+  const products = await fetchProducts(selectPage.value, selectShow.value);  
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
+
+// selectBrand.addEventListener('change', async (event) => {
+//   let filteredProducts;
+//   const products = await fetchProducts(selectPage.value, selectShow.value);
+//   if (selectBrand.value != "All") {
+//     console.log(products);
+//     filteredProducts = products.result.filter(product => product.brand == selectBrand.value);
+//     console.log(filteredProducts);
+//   } else {
+//     filteredProducts = products;
+//   }
+//   setCurrentProducts(filteredProducts);
+//   render(currentProducts, currentPagination);
+// });
+
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
-
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
