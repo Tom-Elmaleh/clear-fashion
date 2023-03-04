@@ -20,8 +20,18 @@
         <select name="page" id="page-select"> </select>
       </div>
       <div id="filters">
-        <span>By reasonable price</span>
-        <span>By recently released</span>
+        <span>By reasonable price:</span>
+        <select name="recent" id="reasonable-select">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <div id="recent">
+          <span>By recently released</span>
+            <select name="recent" id="recent-select">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>    
+        </div>
         <div id="brand">
           <label for="brand-select">By brands:</label>
           <select name="brand" id="brand-select">
@@ -33,6 +43,7 @@
             <option value="hast">hast</option>
             <option value="loom">loom</option>
             <option value="panafrica">panafrica</option>
+            <option value="dedicated">dedicated</option>
           </select>
         </div>
       <div id="sort">
@@ -40,8 +51,8 @@
         <select name="sort" id="sort-select">
           <option value="price-asc">Cheaper</option>
           <option value="price-desc">Expensive</option>
-          <option value="date-asc">Recently released</option>
-          <option value="date-desc">Anciently released</option>
+          <option value="date-asc">Anciently released</option>
+          <option value="date-desc">Recently released</option>
         </select>
       </div>
     </section>

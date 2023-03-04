@@ -28,35 +28,86 @@ const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 
-// New selectors created
 const selectBrand = document.querySelector('#brand-select'); // Brand selector
-const selectSortPrice = document.querySelector('#sort-select'); // Sorted Price selector
+const selectRecent = document.querySelector('#recent-select'); // Recently released selector 
+const selectReasonablePrice = document.querySelector('#reasonable-select'); // Reasonable Price selector
+const selectSort = document.querySelector('#sort-select'); // Sort selector
+const nbBrands = document.querySelector('#nbBrands');
 
+let currentBrand = "All";
 
 /**
  * Set global value
  * @param {Array} result - products to display
  * @param {Object} meta - pagination meta info
  */
+
 const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
+  // The part below ables to deal display products that were released less than two weeks ago 
+  if (selectRecent.value=="Yes")
+  {
+    const today = new Date();
+    const twoWeeksAgo = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000);
+    currentProducts = currentProducts.filter((product) => {
+      const releasedDate = new Date(product.released);
+      return releasedDate > twoWeeksAgo;
+    });
+  }
+
+  if(selectReasonablePrice.value=="Yes") // filter by reasonable price
+  {
+    currentProducts = currentProducts.filter(products => products.price<=50);
+  }
+
+  if(selectSort.value=="price-asc") // sort by cheapest products
+  { 
+    currentProducts =currentProducts.sort((product1,product2) => product1.price - product2.price);
+  }
+  
+  if(selectSort.value=="price-desc") // sort by expensive products
+  {
+    currentProducts = currentProducts.sort((product1,product2) => product2.price - product1.price);
+  }
+
+  if(selectSort.value=="date-asc") // sort by anciently released (old to recent)
+  {
+    currentProducts = currentProducts.sort((productA,productB) => { 
+      var dateA = new Date(productA.released);
+      var dateB = new Date(productB.released);
+      return dateA - dateB;});
+  }
+
+  if(selectSort.value=="date-desc") // sort by recently released (recent to old)
+  {
+    currentProducts = currentProducts.sort((productA,productB) => { 
+      var dateA = new Date(productA.released);
+      var dateB = new Date(productB.released);
+      return dateB - dateA;});
+  }
   currentPagination = meta;
 };
+
 
 /**
  * Fetch products from api
  * @param  {Number}  [page=1] - current page to fetch
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
- * @param {String} // brand name used to filter 
+ * 
  */
 
-const fetchProducts = async (page = 1, size = 12) => {
+const fetchProducts = async (page = 1, size = 12,brand='All') => {
   try {
-    const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`);
-    const body = await response.json();
+    let link = `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`;
 
+   // Condition that ables to retrieve all products from a specific brand
+    if (brand !== "All") {
+      currentBrand = brand;
+      link += `&brand=${brand}`; // we add the value of the selector to the link
+    }
+    const response = await fetch(link);   
+    const body = await response.json();
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
@@ -68,6 +119,7 @@ const fetchProducts = async (page = 1, size = 12) => {
     return {currentProducts, currentPagination};
   }
 };
+
 
 /**
  * Render list of products
@@ -118,9 +170,7 @@ const renderPagination = pagination => {
  */
 const renderIndicators = pagination => {
   const {count} = pagination;
-
   spanNbProducts.innerHTML = count;
-  console.log(spanNbProducts);
 };
 
 const render = (products, pagination) => {
@@ -148,35 +198,55 @@ selectShow.addEventListener('change', async (event) => {
   Select the number of the page
 */
 selectPage.addEventListener('change', async (event) => {
-  const products = await fetchProducts(parseInt(event.target.value), selectShow.value);
-  // the first parameter corresponds to the currentPage and the second indicates the number of products to display
-  // which is indicated by  the selectShow.value 
+  // the first parameter corresponds to the currentPage value (indicated by the selector value) 
+  // and the second indicates the pageCount of the currentPage 
+  const products = await fetchProducts(parseInt(event.target.value),currentPagination.pageSize);
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
 
+
+/*
+  Feature 2 - Filter by brands name
+*/
 selectBrand.addEventListener('change', async (event) => {
-  const products = await fetchProducts(selectPage.value, selectShow.value);  
+  console.log(currentPagination);
+  const products = await fetchProducts(currentPagination.currentPage,currentPagination.pageSize,event.target.value);
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
 
-// selectBrand.addEventListener('change', async (event) => {
-//   let filteredProducts;
-//   const products = await fetchProducts(selectPage.value, selectShow.value);
-//   if (selectBrand.value != "All") {
-//     console.log(products);
-//     filteredProducts = products.result.filter(product => product.brand == selectBrand.value);
-//     console.log(filteredProducts);
-//   } else {
-//     filteredProducts = products;
-//   }
-//   setCurrentProducts(filteredProducts);
-//   render(currentProducts, currentPagination);
-// });
+/*
+  Feature 3 - Filter by recent products
+  The function setCurrentProducts was modified so that the feature would work
+*/
+selectRecent.addEventListener('change', async (event) => {
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize); 
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
+
+/*
+  Feature 4 - Filter by reasonable price
+  The function setCurrentProducts was modified so that the feature would work
+*/
+selectReasonablePrice.addEventListener('change', async (event) => {
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize); 
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
+
+selectSort.addEventListener('change', async (event) => {
+  const products = await fetchProducts(currentPagination.currentPage, currentPagination.pageSize); 
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
+
 
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
+
+

@@ -82,7 +82,7 @@ console.log(products_sorted_price);
 const date_ordered = marketplace.sort((productA,productB) => { 
   var dateA = new Date(productA.released);
   var dateB = new Date(productB.released);
-  dateB.released - dateA.released;});
+  return dateB - dateA;});
   
 const products_sorted_date = date_ordered.map(x=>x.name);
 console.log(products_sorted_date);
@@ -146,8 +146,12 @@ const brands_products = Object.entries(brands).reduce((nb_products, [brand, prod
   nb_products[brand] = products.length; 
   return nb_products;}, {});
 
-console.log(brands_products);
+// Object.entries(brands) method ables to convert brands into an array of key-value pairs (brand : products)
+// reduce creates the object nb_products which counts the number of products for each brand
+// At the beginning nb_products object is as an empty object
+// For each key-value pair, a new property is created in the object nb_products with brand name (key) and product.length(value)
 
+console.log(brands_products);
 
 // 🎯 TODO 9: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
@@ -156,7 +160,7 @@ console.log(brands_products);
 const brand_price_sorted = {};
 for (const brand in brands) {
   const sorted_priced = brands[brand].sort((product1, product2) => product2.price - product1.price); // we sort the price for each brand
-  brand_price_sorted[brand] = sorted_priced;
+  brand_price_sorted[brand] = sorted_priced; // we add the sorted list of prices related to the brand value
 }
 
 console.log(brand_price_sorted);
@@ -173,7 +177,7 @@ for (const brand in brands) {
     const dateB = new Date(productB.released);  
     return dateA - dateB;
   });
-  brand_date_sorted[brand] = sorted_date;
+  brand_date_sorted[brand] = sorted_date; // we add the sorted list of dates related to the brand value
 }
 
 console.log(brand_date_sorted);
@@ -406,10 +410,12 @@ console.log(newProducts);
 // // A reasonable price if all the products are less than 100€
 
 const prices = COTELE_PARIS.map(x=>x.price);
-let reasonable = prices.every(checkPrice)
+
 function checkPrice(price){
   return price<100;
 }
+
+let reasonable = prices.every(checkPrice)
 
 console.log(reasonable);
 
