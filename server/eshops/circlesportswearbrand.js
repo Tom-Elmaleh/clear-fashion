@@ -9,23 +9,26 @@ const cheerio = require('cheerio');
 const parse = data => {
   const $ = cheerio.load(data);
 
-  return $('.productList-container .productList')
+  return $('.product-grid-container .grid__item')
     .map((i, element) => {
-      const name = $(element)
-        .find('.productList-title')
+      let name = $(element)
+        .find('.full-unstyled-link')
         .text()
         .trim()
         .replace(/\s/g, ' ');
+      name = name.substring(0, Math.floor(name.length / 2)).trim();
       const price = parseInt(
         $(element)
-          .find('.productList-price')
+          .find('.money') //.price__regular .money
           .text()
+          .slice(1)
       );
-      const brand = "dedicated";
+      const brand = "circlesportswear";
       return {name,brand,price};
     })
     .get();
 };
+
 
 /**
  * Scrape all the products for a given url page

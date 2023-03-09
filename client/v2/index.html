@@ -4,6 +4,62 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>👕 Clear Fahion | Environmentally & human-friendly clothes</title>
   </head>
+  <!--Feature 15 : usable and pleasant UX -->
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color:#1A001A;
+        background-color: white;
+      }
+           
+      h1 {
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        color: #00111a;
+        font-size: 40px;
+        text-align: center;
+      }
+    
+      h2 {
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        color:#007bff;
+      }
+      
+      a {
+        color:#00001A;
+        text-decoration: none;
+      }
+      
+      a:hover {
+        text-decoration: underline;
+      }
+      
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+      
+      .btn {
+        display: inline-block;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 24px;
+      }
+      .btn:hover {
+        background-color: #0069d9;
+      }
+
+  </style>
   <body>
     <h1>Clear fashion</h1>
     <section id="options">
@@ -49,6 +105,7 @@
       <div id="sort">
         <label for="sort-select">Sort:</label>
         <select name="sort" id="sort-select">
+          <option value = "Unsort"> Unsort </option>
           <option value="price-asc">Cheaper</option>
           <option value="price-desc">Expensive</option>
           <option value="date-asc">Anciently released</option>
@@ -64,27 +121,27 @@
       </div>
       <div>
         <span>Number of brands</span>
-        <span id="nbBrands">0</span>
+        <span id = "nbBrands" >0</span>
       </div>
       <div>
         <span>Number of new products</span>
-        <span>0</span>
+        <span id = "RecentProducts"> 0</span>
       </div>
       <div>
         <span>p50 price value</span>
-        <span>0</span>
+        <span id = "p50value">0</span>
       </div>
       <div>
         <span>p90 price value</span>
-        <span>0</span>
+        <span id = "p90value">0</span>
       </div>
       <div>
         <span>p95 price value</span>
-        <span>0</span>
+        <span id = "p95value"> 0 </span>
       </div>
       <div>
         <span>Last released date</span>
-        <span>2020-01-01</span>
+        <span id = "last-released">2020-01-01</span>
       </div>
     </section>
     <section id="products"></section>

@@ -1,4 +1,3 @@
-/* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./eshops/dedicatedbrand');
 
 async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
@@ -18,16 +17,4 @@ async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
 
 const [,, eshop] = process.argv;
 
-// sandbox(eshop);
-
-const fs = require('fs');
-const path = require('path');
-
-async function Test() {
-  const jsonPath = path.join(__dirname, 'brands.json'); // make sure to specify the full path to the file
-  const jsonData = await fs.promises.readFile(jsonPath, 'utf-8');
-  const brands = JSON.parse(jsonData);
-  console.log(brands);
-}
-
-Test()
+sandbox(eshop);
