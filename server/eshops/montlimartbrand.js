@@ -7,9 +7,17 @@ const cheerio = require('cheerio');
  * @return {Array} products
  */
 
+function GenerateRandomDate() {
+  const now = new Date();
+  const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+  const randomTimestamp = Math.floor(Math.random() * (now.getTime() - oneYearAgo.getTime())) + oneYearAgo.getTime();
+  const randomDate = new Date(randomTimestamp);
+  return randomDate.toLocaleDateString('en-US');
+}
+
 const parse = data => {
   const $ = cheerio.load(data);
-
+  const date = GenerateRandomDate();
   return $('.products-list .products-list__block.products-list__block--grid')
     .map((i, element) => {
       const name = $(element)
@@ -23,7 +31,7 @@ const parse = data => {
           .text()
       );
       const brand = "montlimar";
-      return {name,brand,price};
+      return {name,brand,price,date};
     })
     .get();
 };
