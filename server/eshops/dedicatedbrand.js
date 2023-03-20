@@ -7,18 +7,17 @@ const cheerio = require('cheerio');
  * @return {Array} products
  */
 
+// Function to generate a random date within one month
 function GenerateRandomDate() {
-  const now = new Date();
-  const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-  const randomTimestamp = Math.floor(Math.random() * (now.getTime() - oneYearAgo.getTime())) + oneYearAgo.getTime();
-  const randomDate = new Date(randomTimestamp);
+  const right_now = new Date();
+  const oneMonthAgo = new Date(right_now.getTime() - 30 * 24 * 60 * 60 * 1000); // one month ago date
+  const random_timestamp = Math.floor(Math.random() * (right_now.getTime() - oneMonthAgo.getTime())) + oneMonthAgo.getTime(); 
+  const randomDate = new Date(random_timestamp);
   return randomDate.toLocaleDateString('en-US');
 }
 
-
 const parse = data => {
   const $ = cheerio.load(data);
-  const date = GenerateRandomDate();
   return $('.productList-container .productList')
     .map((i, element) => {
       const name = $(element)
@@ -32,6 +31,7 @@ const parse = data => {
           .text()
       );
       const brand = "dedicated";
+      const date = GenerateRandomDate();
       return {name,brand,price,date};
     })
     .get();
