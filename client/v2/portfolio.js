@@ -1,6 +1,10 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
 
+// I have deployed my api on vercel which works it is on the following link : 
+// https://api-eight-virid.vercel.app/.
+
+
 /*
 Description of the available api
 GET https://clear-fashion-api.vercel.app/

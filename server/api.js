@@ -71,7 +71,6 @@ async function findProductById(IdProduct) {
 app.get('/products/:id', async (req, res) => {
   const IdProduct = req.params.id;
   const product_id = await findProductById(IdProduct);
-  //res.json(product_id);
   res.send(product_id);
 });
 
