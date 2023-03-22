@@ -1,3 +1,8 @@
+I have been able to make the first workshop completely. As for the second workshop I haven't implemented all of the functionalities. The ones I didn't implement are the following : 13 and 14. The filters and sort by elments may need improvement. The indicators were succesfully implemented. I also think the UX could be improved as well. As for the scraping workshop, I imported everything except urls & images of the products. I imported products (brand, date, name, price)from only one page of each eshop.
+I also managed to make all of the queries on the workshop4 and they work on the with MongoDB. The query related to showing products scraped less than two weeks ago may need improvement
+As for the API, I implemented successfully both of the requests (search and by product ID).
+Finally for the Vercel API, I managed to deploy only the api which can be accessed on the following link : https://api-eight-virid.vercel.app/
+
 # 👕 Clear Fashion
 
 > What's the story behind each item of clothing you buy?
