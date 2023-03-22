@@ -13,7 +13,7 @@ function GenerateRandomDate() {
   const oneMonthAgo = new Date(right_now.getTime() - 30 * 24 * 60 * 60 * 1000); // one month ago date
   const random_timestamp = Math.floor(Math.random() * (right_now.getTime() - oneMonthAgo.getTime())) + oneMonthAgo.getTime(); 
   const randomDate = new Date(random_timestamp);
-  return randomDate.toLocaleDateString('en-US');
+  return randomDate;
 }
 
 const parse = data => {

@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 const MONGODB_URI = 'mongodb+srv://tom:mongoCluster@cluster.wlasw6t.mongodb.net/?retryWrites=true&writeConcern=majority';
 const MONGODB_DB_NAME = 'clearfashion';
 
-
+// function that ables to add the data products on my cluster in mongodb inside a collection
 async function ClientConnect() {
   const client = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true });
   const db = client.db(MONGODB_DB_NAME);
@@ -68,10 +68,9 @@ async function Products_Scraped_Less_Than_2_Weeks_Ago() {
   const client = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true });
   const db = client.db(MONGODB_DB_NAME);
   const collection = db.collection('products');
-  const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
-  const twoWeeksAgoString = twoWeeksAgo.toLocaleDateString('en-US');
-  const products = await collection.find({ "date" : {$lt:twoWeeksAgoString}}).toArray();
+  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
+  //console.log(twoWeeksAgo);
+  const products = await collection.find({"date":{$gt:twoWeeksAgo}}).toArray();
   console.log("Products scraped less than two weeks ago");
   console.log(products);
   await client.close();
@@ -87,5 +86,4 @@ function main()
   Products_Sorted_Date(1);
   Products_Scraped_Less_Than_2_Weeks_Ago();
 }
-
-main();
+main()
